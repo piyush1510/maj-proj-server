@@ -1,0 +1,13 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "piyush",
+  "license": "MIT",
+  "dependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
+  }
+}
