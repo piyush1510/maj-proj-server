@@ -1,7 +1,29 @@
+const { faker } = require('@faker-js/faker');
+const empData = [1, 2, 3, 4, 5, 6].map(e => {
+    return {
+        count: e,
+        transactionDate: faker.datatype.datetime().toISOString(),
+        broughtFrom: faker.company.name(),
+        value: faker.datatype.number({ min: 100, max: 300 }),
+        productId: `${faker.datatype.number({ min: 4570, max: 4590 })}f#`
+    }
+})
+
+
 function initHandler(app){
     app.get('/health',function(req,res,next){
           res.send("Health OK")
     });
+
+    app.post('/productDetails', (req, res) => {
+        const { productId } = req.body;
+        res.json({
+            temp: tempFakeData,
+            mq: mqFakeData,
+            p: perishedPercentage
+        })
+    });
+    
     app.post('/retailersAuth', (req, res) => {
         const { email, password } = req.body;
         console.log(req.body);
