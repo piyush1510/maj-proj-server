@@ -7,12 +7,12 @@ function initHandler(app){
         console.log(req.body);
         if (!email || !password) return res.json({ msg: "no password or email" })
         else if (email === "abcd" && password === "abcd")
-            res.json({ token: TOKEN })
+            res.json({ token: "TOKEN" })
     })
     app.post('/retailersDashboard', (req, res) => {
         const { token } = req.body;
         console.log(req.body)
-        if (token === TOKEN)
+        if (token === "TOKEN")
             res.json({ in: empData, out: empData })
         else
             return res.json({ msg: "token missing" })
