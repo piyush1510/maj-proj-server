@@ -18,17 +18,15 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -o StrictHostKeyChecking=no -i private_key -r ./* ${USER_NAME}@${HOSTNAME}:/home/ubuntu/fsc
-      # - name: SSH and resolve
-      #   env:
-      #     PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY  }}
-      #     HOSTNAME: ${{ secrets.HOST_NAME  }}
-      #     USER_NAME: ${{ secrets.USER_NAME  }}
-      #   run: |
-      #     echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-      #     ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+      - name: SSH and resolve
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY  }}
+          HOSTNAME: ${{ secrets.HOST_NAME  }}
+          USER_NAME: ${{ secrets.USER_NAME  }}
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
           
-      #     #Now we have got the access of EC2 and we will start the deploy .
-      #     export NVM_DIR="/home/ubuntu/.nvm"
-      #     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-      #       '
+          make fsc
+            '
 
