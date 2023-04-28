@@ -4,3 +4,5 @@ create_mysql:
 remove_mysql:
 	docker rm -f node_mysql
 
+fsc:
+	pm2 restart index.js
