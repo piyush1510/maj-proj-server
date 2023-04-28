@@ -9,6 +9,13 @@ const empData = [1, 2, 3, 4, 5, 6].map(e => {
     }
 })
 
+const perishedPercentage = 70.2
+for (let i = 0; i < 15; i++) {
+    tempFakeData.push(faker.datatype.number({ min: 20, max: 35 }))
+    mqFakeData.push(faker.datatype.number({ min: 1500, max: 2000 }))
+}
+
+
 
 function initHandler(app){
     app.get('/health',function(req,res,next){
@@ -23,7 +30,7 @@ function initHandler(app){
             p: perishedPercentage
         })
     });
-    
+
     app.post('/retailersAuth', (req, res) => {
         const { email, password } = req.body;
         console.log(req.body);
