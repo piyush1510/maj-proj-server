@@ -9,6 +9,9 @@ const empData = [1, 2, 3, 4, 5, 6].map(e => {
     }
 })
 
+const tempFakeData = []
+const mqFakeData = []
+
 const perishedPercentage = 70.2
 for (let i = 0; i < 15; i++) {
     tempFakeData.push(faker.datatype.number({ min: 20, max: 35 }))
