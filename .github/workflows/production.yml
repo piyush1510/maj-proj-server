@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3    
+
       - name: SCP and Copy code
         env:
           PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY  }}
