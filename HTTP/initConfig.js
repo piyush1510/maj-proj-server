@@ -1,12 +1,15 @@
+require('dotenv').config(); 
+
+
 const conf = {
     primaryInfo:{
         isDevMode:true,
-        serverPort:5000,
+        serverPort:parseInt(process.env.SERVER_PORT),
     },
     connectivity:{
         mySqlHost:"localhost",
         mySqlUser:"root",
-        mySqlPort:3306,
+        mySqlPort:parseInt(process.env.MYSQL_PORT),
         mySqlPassword:"mypassword",
         db:"fsc_blockchain"
     },
