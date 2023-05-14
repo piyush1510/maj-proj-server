@@ -5,5 +5,10 @@ const {initHandler} = require("./HTTP/initHandler")
 
 const config = conf;
 const app = initServer(config)
+
 initDB(config)
-initHandler(app)
+
+initHandler(app,config)
+
+
+exports.module = {config}
