@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan');
 const { faker } = require('@faker-js/faker');
+const mysql = require('mysql2');
 
 const app = express();
 const PORT = 5000;
@@ -16,6 +17,37 @@ const mqFakeData = [];
 //     { count: 6, transactionDate: '23/10/2022', broughtFrom: "AMul Pvt.lmd", value: 100, productId: "4588f#" },
 //     { count: 7, transactionDate: '25/10/2022', broughtFrom: "Reliance Pvt.lmd", value: 150, productId: "4187f#" },
 // ]
+
+
+// initDB
+
+const conn = mysql.createConnection(
+    {
+        host:"localhost",
+        port:3306,
+        password:"mypassword",
+        user:"root",
+        database:"fsc_blockchain"
+    }
+)
+
+conn.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+  });
+
+  conn.query(`create table IF NOT EXISTS products(
+    product_id int,
+    product_hash_id varchar(100),
+    product_name  varchar(100),
+    packaged_date Date
+)`,function(error,result,fields){
+    if (error) throw error;
+    console.log("table created successfully");
+})
+
+
+
 const empData = [1, 2, 3, 4, 5, 6].map(e => {
     return {
         count: e,
