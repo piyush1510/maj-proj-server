@@ -40,12 +40,18 @@ async function initDB(conf){
            }
     })
 
-    conn.execute(`create table if not exists products(
-        product_id int NOT NULL AUTO_INCREMENT,
-        product_name  varchar(100),
-        packaged_date date default(CURRENT_DATE),
-        device_mac_id varchar(150),
-        primary key (product_id));`,(err,result,field)=>{
+    conn.execute(
+        `create table if not exists products(
+            product_id int NOT NULL AUTO_INCREMENT,
+            product_type varchar(100),
+            product_name  varchar(100),
+            brought_from varchar(100),
+            weight_ int,
+            price_ int,
+            packaged_date date default(CURRENT_DATE),
+            device_mac_id varchar(150),
+            primary key (product_id)
+        );`,(err,result,field)=>{
         if(err){
             console.log(err);
            }
