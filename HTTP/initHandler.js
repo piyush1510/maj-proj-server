@@ -28,22 +28,25 @@ function initHandler(app,config){
     });
 
     app.post('/productDetails', (req, res) => {
-        const { product_name, device_mac_id } = req.body;
+        const { broughtFrom, productType,productName,weight,price,deviceMacId } = req.body;
         config.connections.db.execute(`insert into products 
-        (product_name,device_mac_id) 
-        values (${product_name},${device_mac_id});`,(error,results,fields)=>{
+        (product_name,product_type,brought_from,weight_,price_,device_mac_id) 
+        values ("${productName}","${productType}","${broughtFrom}",${weight},${price},"${deviceMacId}");`,(error,results,fields)=>{
             if(error){
                console.log(error)
             }
             else{
-                return res.json({status:"sucessfully inserted"});
+                console.log(results)
+                return res.json({productId:results.insertId});
             }
         })
     });
 
-    app.get('/productDetails',(req,res)=>{
+    app.get('/productDetails/:id',(req,res)=>{
+        const id = req.params.id
         config.connections.db.execute(
-            `select * from products;`,
+            `select * from products
+             where product_id = ${id};`,
             (err,results,fields)=>{
                 if(err){
                    console.log(err)
@@ -71,9 +74,11 @@ function initHandler(app,config){
             return res.json({ msg: "token missing" })
     })
 
-    app.get('/customerDetails', (req,res)=>{
+    app.get('/customerDetails/:id', (req,res)=>{
+         const id = req.params.id
          config.connections.db.execute(
-            `select * from users ;`,(err,result,fields)=>{
+            `select * from users 
+            where user_id = ${id};`,(err,result,fields)=>{
                 if(err){
                     console.log(err);
                 }
@@ -93,17 +98,16 @@ function initHandler(app,config){
                     console.log(err);
                 }
                 else{
-                   console.log(result);
-                   return res.json({status:"sucessfully inserted"});
+                   return res.json({userId:results.insertId});
                 }
             }
         );
     })
 
-    app.get('/quailityDetails',(req,res)=>{
+    app.get('/qualityDetails/:id',(req,res)=>{
         config.connections.db.execute(
             `select * from quality where
-             product_id = ${req.body.product_id};`,(err,results,fields)=>{
+             product_id = ${req.params.id};`,(err,results,fields)=>{
                 if(err){
                   console.log(err)
                 }
@@ -127,12 +131,12 @@ function initHandler(app,config){
         );
     })
 
-    app.get('/quantityDetails',(req,res)=>{
+    app.get('/quantityDetails/:id',(req,res)=>{
         config.connections.db.execute(
             `select * from aunatity where
-             product_id = ${req.body.product_id};`,(err,results,fields)=>{
+             product_id = ${req.params.id};`,(err,results,fields)=>{
                 if(err){
-                  console.log(err)
+                  console.log(err)  
                 }
                 else{
                     return res.json({quantity_details:results})
