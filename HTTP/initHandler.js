@@ -58,13 +58,29 @@ function initHandler(app,config){
         )
     })
 
-    app.post('/retailersAuth', (req, res) => {
+    app.post('/roleBasedAuth', (req, res) => {
         const { email, password } = req.body;
-        console.log(req.body);
         if (!email || !password) return res.json({ msg: "no password or email" })
-        else if (email === "abcd" && password === "abcd")
-            res.json({ token: "TOKEN" })
+        config.connections.db.execute(
+            `select * from users where user_name = "${req.body.email}" AND designation = "${req.body.role}"`,
+            (err,results,fields)=>{
+                if(err){
+                  console.log(err)
+                }
+                else{
+                    if(results.length>0){
+                        if(password === results[0].password){
+                            res.json({token:"Token"})
+                        }
+                    } 
+                    else{
+                        res.json({message:"unauthorized user"})
+                    }
+                }
+            }
+        )
     })
+    
     app.post('/retailersDashboard', (req, res) => {
         const { token } = req.body;
         console.log(req.body)
@@ -73,6 +89,7 @@ function initHandler(app,config){
         else
             return res.json({ msg: "token missing" })
     })
+
 
     app.get('/customerDetails/:id', (req,res)=>{
          const id = req.params.id
@@ -92,22 +109,37 @@ function initHandler(app,config){
 
     app.post('/customerDetails', (req,res)=>{
         config.connections.db.execute(
-            `insert into users ( user_name, designation) 
-            values ("${req.body.user_name}","${req.body.designation}"); `,(err,result,fields)=>{
-                if(err){
-                    console.log(err);
+           `select * from users where user_name="${req.body.user_name}"`,(err,results,fields)=>{
+              if(err){
+                console.log(err)
+              }
+              else{
+                if(results.length>0){
+                   res.json({message:"user with user name already exists"});
                 }
                 else{
-                   return res.json({userId:results.insertId});
+                    config.connections.db.execute(
+                        `insert into users ( user_name, designation,password) 
+                        values ("${req.body.user_name}","${req.body.designation}","${req.body.password}"); `,(err,result,fields)=>{
+                            if(err){
+                                console.log(err);
+                            }
+                            else{
+                            return res.json({userId:result.insertId});
+                            }
+                        }
+                    )
                 }
-            }
+              }
+           }
         );
     })
 
     app.get('/qualityDetails/:id',(req,res)=>{
         config.connections.db.execute(
             `select * from quality where
-             product_id = ${req.params.id};`,(err,results,fields)=>{
+             product_id = ${req.params.id}
+             limit 10`,(err,results,fields)=>{
                 if(err){
                   console.log(err)
                 }
@@ -118,11 +150,12 @@ function initHandler(app,config){
         )
     })
 
-    app.post('qualityDetails',(req,res)=>{
+    app.post('/qualityDetails',(req,res)=>{
         config.connections.db.execute(
             `insert into quality ( product_id, temperature, humidity, gas) 
             values (${req.body.product_id},${req.body.temperature}, ${req.body.humidity}, ${req.body.gas}); `,(err,result,fields)=>{
                 if(err){
+                    console.log(err)
                 }
                 else{
                    return res.json({status:"sucessfully inserted"});
@@ -133,8 +166,9 @@ function initHandler(app,config){
 
     app.get('/quantityDetails/:id',(req,res)=>{
         config.connections.db.execute(
-            `select * from aunatity where
-             product_id = ${req.params.id};`,(err,results,fields)=>{
+            `select * from quantity where
+             product_id = ${req.params.id}
+             limit 10;`,(err,results,fields)=>{
                 if(err){
                   console.log(err)  
                 }
@@ -145,10 +179,10 @@ function initHandler(app,config){
         )
     })
 
-    app.post('quantityDetails',(req,res)=>{
+    app.post('/quantityDetails',(req,res)=>{
         config.connections.db.execute(
             `insert into quantity ( product_id, product_stop, weight_stop) 
-            values (${req.body.product_id},${req.body.temperature}, ${req.body.humidity}, ${req.body.gas}); `,(err,result,fields)=>{
+            values (${req.body.product_id},"${req.body.product_stop}", ${req.body.weight_stop}); `,(err,result,fields)=>{
                 if(err){
                     console.log(err)
                 }

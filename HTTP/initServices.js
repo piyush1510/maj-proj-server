@@ -31,6 +31,7 @@ async function initDB(conf){
         user_id int NOT NULL AUTO_INCREMENT,
         user_name varchar(100),
         designation varchar(100),
+        password varchar(100),
         primary key (user_id));`,(err,result,fields)=>{
            if(err){
             console.log(err);
@@ -48,7 +49,7 @@ async function initDB(conf){
             brought_from varchar(100),
             weight_ int,
             price_ int,
-            packaged_date date default(CURRENT_DATE),
+            packaged_date DATETIME default(now()),
             device_mac_id varchar(150),
             primary key (product_id)
         );`,(err,result,field)=>{
@@ -66,7 +67,7 @@ async function initDB(conf){
             temperature int,
             humidity int,
             gas int,
-            taken_at date default(CURRENT_DATE),
+            taken_at DATETIME default(now()),
             primary key (product_id,taken_at));`,(err,result,field)=>{
             if(err){
                 console.log(err);
@@ -81,7 +82,7 @@ async function initDB(conf){
             product_id int,
             product_stop varchar(50),
             weight_stop int,
-            taken_at date default(CURRENT_DATE),
+            taken_at DATETIME default(now()),
             primary key (product_id, taken_at)
         );`,(err,result,field)=>{
             if(err){
