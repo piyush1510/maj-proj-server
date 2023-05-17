@@ -139,8 +139,9 @@ function initHandler(app,config){
         config.connections.db.execute(
             `select * from quality where
              product_id = ${req.params.id}
+             order by taken_at desc 
              limit 10
-             order by taken_at desc `,(err,results,fields)=>{
+             `,(err,results,fields)=>{
                 if(err){
                   console.log(err)
                 }
@@ -193,8 +194,8 @@ function initHandler(app,config){
         config.connections.db.execute(
             `select * from quantity where
              product_id = ${req.params.id}
-             limit 10
-             order by taken_at desc;`,(err,results,fields)=>{
+             order by taken_at desc
+             limit 10;`,(err,results,fields)=>{
                 if(err){
                   console.log(err)  
                 }
