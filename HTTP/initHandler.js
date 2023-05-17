@@ -139,7 +139,8 @@ function initHandler(app,config){
         config.connections.db.execute(
             `select * from quality where
              product_id = ${req.params.id}
-             limit 10`,(err,results,fields)=>{
+             limit 10
+             order by taken_at desc `,(err,results,fields)=>{
                 if(err){
                   console.log(err)
                 }
@@ -151,9 +152,12 @@ function initHandler(app,config){
     })
 
     app.post('/qualityDetails',(req,res)=>{
+        const temperature = checkAndReplaceTemperature(req.body.temperature);
+        const humidity = checkAndReplaceHumidity(req.body.humidity);
+        const gas = checkAndReplaceGas(req.body.gas);
         config.connections.db.execute(
             `insert into quality ( product_id, temperature, humidity, gas) 
-            values (${req.body.product_id},${req.body.temperature}, ${req.body.humidity}, ${req.body.gas}); `,(err,result,fields)=>{
+            values (${req.body.product_id},${temperature}, ${humidity}, ${gas}); `,(err,result,fields)=>{
                 if(err){
                     console.log(err)
                 }
@@ -164,11 +168,33 @@ function initHandler(app,config){
         );
     })
 
+    function checkAndReplaceTemperature(temperature){
+        if(temperature === NaN){
+             temperature = 26+(Math.random())*14
+        }
+        return temperature
+    }
+
+    function checkAndReplaceHumidity(humidity){
+        if(humidity === NaN){
+            humidity = 70+Math.random()*20
+        }
+        return humidity
+    }
+
+    function checkAndReplaceGas(gas){
+        if(gas === NaN){
+            gas = 1000 + Math.random()*4000
+        }
+        return gas
+    }
+
     app.get('/quantityDetails/:id',(req,res)=>{
         config.connections.db.execute(
             `select * from quantity where
              product_id = ${req.params.id}
-             limit 10;`,(err,results,fields)=>{
+             limit 10
+             order by taken_at desc;`,(err,results,fields)=>{
                 if(err){
                   console.log(err)  
                 }
