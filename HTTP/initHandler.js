@@ -170,21 +170,21 @@ function initHandler(app,config){
     })
 
     function checkAndReplaceTemperature(temperature){
-        if(temperature === NaN){
+        if(temperature == nan){
              temperature = 26+(Math.random())*14
         }
         return temperature
     }
 
     function checkAndReplaceHumidity(humidity){
-        if(humidity === NaN){
+        if(humidity == nan){
             humidity = 70+Math.random()*20
         }
         return humidity
     }
 
     function checkAndReplaceGas(gas){
-        if(gas === NaN){
+        if(gas == nan){
             gas = 1000 + Math.random()*4000
         }
         return gas
