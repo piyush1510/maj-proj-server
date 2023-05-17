@@ -193,7 +193,9 @@ function initHandler(app,config){
     app.get('/quantityDetails/:id',(req,res)=>{
         config.connections.db.execute(
             `select * from quantity where
-             product_id = ${req.params.id};`,(err,results,fields)=>{
+             product_id = ${req.params.id}
+             order by taken_at desc
+             limit 10;`,(err,results,fields)=>{
                 if(err){
                   console.log(err)  
                 }
